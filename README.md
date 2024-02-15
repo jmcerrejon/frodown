@@ -6,21 +6,22 @@
 
 This is a simple markdown editor with frontmatter support. It's built with _Python_ + a great _TUI (Terminal User Interface)_ called _Textual_ (+ info at [textualize.io](https://textualize.io)).
 
-It's a simple tool that I use to write my blog posts and other markdown files. My blog is built using [VuePress 2](https://v2.vuepress.vuejs.org) + [Hope](https://theme-hope.vuejs.press) theme.
+It's a simple tool that I use to write my blog posts and other markdown files. My blog is built using [VuePress 2](https://v2.vuepress.vuejs.org) + [Hope](https://theme-hope.vuejs.press) theme. Visit me at https://misapuntesde.com
 
 ## Features
 
 - [x] Frontmatter support.
 - [x] Markdown editor.
 - [x] Save to file.
-- [ ] Add a footer.
-- [ ] Shortcut keys support.
+- [x] Add a footer.
+- [x] Light theme (because I think some people like brightness).
 - [ ] Markdown cheat sheet on sidebar.
-- [ ] Open with latest values If you quit and don't save the info.
 - [ ] Markdown preview.
+- [ ] Open with latest values If you quit and don't save the info.
 - [ ] Move categories and other constants to an env file.
 - [ ] If you have Multi-language support on your site, make multiple markdown files.
 - [ ] Use AI to suggest tags and categories, or translate the article.
+- [ ] Package it as a standalone app.
 
 ## How to use
 
@@ -33,7 +34,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-When you click on **[SAVE]**, it will be saved in the same directory as the original file with the same name as the title 'slugged' and the extension `.md`.
+Clicking on **[SAVE]** will save it to the same directory with the title 'slugged' with the extension '.md'.
 
 ## License and credits
 
