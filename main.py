@@ -1,7 +1,8 @@
 import datetime
 from textual import on
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Input, Label, Select, TextArea, Button
+from textual.binding import Binding
+from textual.widgets import Header, Footer, Input, Label, Select, TextArea, Button
 
 AUTHOR = "Jose Cerrejon"
 CATEGORIES = """General
@@ -26,6 +27,11 @@ Intro text here
 
 
 class Frodown(App):
+    BINDINGS = [
+        Binding(key="ctrl+t", action="toggle_dark", description="Toggle light mode"),
+        Binding(key="ctrl+q", action="quit", description="Quit the app"),
+    ]
+
     CSS = """
     Input.-valid {
         border: tall;
@@ -76,6 +82,7 @@ class Frodown(App):
         yield Label("Article")
         yield self._textarea
         yield Button("Save", variant="primary")
+        yield Footer()
 
     @on(Select.Changed)
     def select_changed(self, event: Select.Changed) -> None:
