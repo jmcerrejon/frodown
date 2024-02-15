@@ -86,7 +86,7 @@ class Frodown(App):
 
     @on(Select.Changed)
     def select_changed(self, event: Select.Changed) -> None:
-        self.title = str(event.value)
+        pass
 
     def format_tags(self, tags: str) -> str:
         return "\n  -".join(tags.split(","))
