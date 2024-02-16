@@ -25,7 +25,7 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 
 ## How to use
 
-Change the constant in the `main.py` file to match your needs. Then, run the following commands:
+Change the constant in the `main.py & categories.txt` files to match your needs. Then, run the following commands:
 
 ```bash
 python -m venv venv
