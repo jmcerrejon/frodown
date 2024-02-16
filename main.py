@@ -4,6 +4,8 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.reactive import reactive
 from textual.containers import Container
+from helper import Helper
+
 from textual.widgets import (
     Static,
     Header,
@@ -16,25 +18,8 @@ from textual.widgets import (
 )
 
 AUTHOR = "Jose Cerrejon"
-CATEGORIES = """General
-Raspberry Pi
-Developer
-Apple
-Linux
-Android
-Arduino
-Atomic Pi
-Banana Pi
-ODROID
-Orange Pi""".splitlines()
-
-DEFAULT_TEXTAREA = """# Title
-![Alt](/path/to/image.jpg)
-
-Intro text here
-- - -
-## Subtitle
-"""
+CATEGORIES = Helper.get_categories()
+DEFAULT_TEXTAREA = Helper.get_textarea_example()
 
 
 class Frodown(App[None]):
@@ -144,41 +129,9 @@ class Message(Static):
 class Sidebar(Container):
     def compose(self) -> ComposeResult:
         yield Title("Cheat Sheet")
-        yield OptionGroup(
-            Message(
-                """::: important Custom important
-...
-:::
-__
-::: info Custom info
-...
-:::
-__
-::: note Custom note
-...
-:::
-__
-::: tip Custom tip
-...
-:::
-__
-::: warning Custom warning
-...
-:::
-__
-::: caution Custom caution
-...
-:::
-__
-Use == == to mark. ==highlighted==
+        yield OptionGroup(Message(Helper.get_cheat_sheet()))
 
-NOTE: My intention is to add a table, so you can select the code and then, the code will be copied to the Textarea.
-"""
-            )
-        )
-
-
-app = Frodown()
 
 if __name__ == "__main__":
+    app = Frodown()
     app.run()
