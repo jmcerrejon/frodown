@@ -26,12 +26,13 @@ class Frodown(App[None]):
     CSS_PATH = "main.tcss"
     BINDINGS = [
         Binding(key="ctrl+s", action="toggle_sidebar", description="Cheat Sheet"),
-        Binding(key="ctrl+q", action="quit", description="Quit the App"),
         Binding(key="ctrl+t", action="toggle_dark", description="Toggle Light Mode"),
+        Binding(key="ctrl+q", action="quit", description="Quit the App"),
     ]
 
     _title: Input
     _author: Input
+    _Icon: Input
     _date: Input
     _category: Select
     _tags: Input
@@ -42,6 +43,7 @@ class Frodown(App[None]):
     def compose(self) -> ComposeResult:
         self._title = Input(id="title", placeholder="Title of the article")
         self._author = Input(id="author", placeholder="Author", value=AUTHOR)
+        self._icon = Input(id="icon", placeholder="Icon", value="fa-regular fa-newspaper")
         self._date = Input(
             id="date", placeholder="Date", value=datetime.date.today().isoformat()
         )
@@ -62,6 +64,8 @@ class Frodown(App[None]):
             self._title,
             Label("Author"),
             self._author,
+            Label("icon"),
+            self._icon,
             Label("Date"),
             self._date,
             Label("Category"),
@@ -85,7 +89,9 @@ class Frodown(App[None]):
         return "\n  -".join(tags.split(","))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        frontmatter = f"""title: {self._title.value}
+        frontmatter = f"""---
+title: {self._title.value}
+icon: {self._icon.value}
 author: {self._author.value}
 date: {self._date.value}
 category:
