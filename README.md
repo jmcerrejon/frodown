@@ -12,15 +12,15 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 
 - [x] Frontmatter support.
 - [x] Markdown editor.
-- [x] Save to file.
+- [x] Save to a file.
 - [x] Add a footer.
-- [x] Light theme (because I think some people like brightness).
-- [x] Markdown cheat sheet on sidebar.
+- [x] Light theme (because I think some people prefer brightness 🤷‍♂️).
+- [x] Markdown cheat sheet on the sidebar.
 - [ ] Markdown preview.
-- [ ] Open with latest values If you quit and don't save the info.
-- [ ] Move categories and other constants to an env file.
-- [ ] If you have Multi-language support on your site, make multiple markdown files.
-- [ ] Use AI to suggest tags and categories, or translate the article.
+- [ ] Open with the latest values if you quit without saving the information.
+- [ ] Move categories and other constants to an environment (env) file.
+- [ ] If you have multi-language support on your site, create multiple markdown files.
+- [ ] Implement AI to suggest tags and categories, or translate the article.
 - [ ] Package it as a standalone app.
 
 ## How to use
@@ -34,13 +34,13 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Clicking on **[SAVE]** will save it to the same directory with the title 'slugged' with the extension '.md'.
+Clicking on **[Save]** will save it to the same directory with the title 'slugged' with the extension '.md'.
 
 ## License and credits
 
 Frodown © 2024 by [Jose Cerrejon](https://github.com/jmcerrejon) is licensed under [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
 
-I'm trying to use _Conventional Commits v1.0.0_. More info at https://www.conventionalcommits.org/en/v1.0.0/
+I'm using _Conventional Commits v1.0.0_. More information can be found at https://www.conventionalcommits.org/en/v1.0.0/.
 
 You can use it for free on your own. If you want to support me, you can!:
 
