@@ -16,7 +16,7 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 - [x] Add a footer.
 - [x] Light theme (because I think some people prefer brightness 🤷‍♂️).
 - [x] Markdown cheat sheet on the sidebar.
-- [ ] Markdown preview.
+- [x] Markdown zen mode & improvements.
 - [ ] Open with the latest values if you quit without saving the information.
 - [ ] Move categories and other constants to an environment (env) file.
 - [ ] If you have multi-language support on your site, create multiple markdown files.
