@@ -51,3 +51,19 @@ Use == == to mark. ==highlighted==
 
 NOTE: My intention is to add a table, so you can select the code and then, the code will be copied to the Textarea.
 """
+
+    def get_icon_by_category(category:str = "General") -> str:
+        icons_list = {
+            "General": "fa-regular fa-newspaper",
+            "Raspberry Pi": "fa-brands fa-raspberry-pi",
+            "Developer": "fa-solid fa-code",
+            "Apple": "fa-brands fa-apple",
+            "Linux": "fa-brands fa-linux",
+            "Android": "fa-brands fa-android",
+            "Arduino": "fa-brands fa-arduino",
+            "Atomic Pi": "fa-solid fa-microchip",
+            "Banana Pi": "fa-solid fa-ban",
+            "ODROID": "fa-solid fa-microchip",
+            "Orange Pi": "fa-solid fa-microchip"
+        }
+        return icons_list.get(category, "fa-regular fa-newspaper")

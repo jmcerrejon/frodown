@@ -96,12 +96,12 @@ class Frodown(App[None]):
             self._title,
             Label("Author"),
             self._author,
-            Label("icon"),
-            self._icon,
             Label("Date"),
             self._date,
             Label("Category"),
             self._category,
+            Label("icon"),
+            self._icon,
             Label("Tags"),
             self._tags,
             Label("Article"),
@@ -130,7 +130,7 @@ class Frodown(App[None]):
 
     @on(Select.Changed)
     def select_changed(self, event: Select.Changed) -> None:
-        pass
+        self._icon.value = Helper.get_icon_by_category(self._category.value)
 
     def format_tags(self, tags: str) -> str:
         return "\n  -".join(tags.split(","))
