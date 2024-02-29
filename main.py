@@ -1,5 +1,5 @@
 import datetime
-from textual import on, events
+from textual import events
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.events import Blur
@@ -29,8 +29,7 @@ is_textarea_expanded = False
 textarea_height = "0%"
 
 class ExtendedTextArea(TextArea):
-
-    def _change_text(self, event, text: str, insert_text:str, move_cursor_relative:int = 0) -> None:
+    def _change_text(self, event, text: str, insert_text: str, move_cursor_relative: int = 0) -> None:
         if event.character == text:
             self.insert(insert_text)
             self.move_cursor_relative(columns=move_cursor_relative)
@@ -40,8 +39,8 @@ class ExtendedTextArea(TextArea):
         self.tab_behavior = "indent"
 
     def _on_key(self, event: events.Key) -> None:
-        """ Handle key events and modify/replace text inserted inside TextArea. """
-        self._change_text(event, text="(", insert_text="()",move_cursor_relative=-1)
+        """Handle key events and modify/replace text inserted inside TextArea."""
+        self._change_text(event, text="(", insert_text="()", move_cursor_relative=-1)
         if event.character == "!" and self.cursor_at_start_of_line:
             self.insert('![alt]("alt")')
             self.move_cursor_relative(columns=-6)
@@ -62,30 +61,26 @@ class Frodown(App[None]):
 
     _title: Input
     _author: Input
-    _icon: Input
     _date: Input
     _category: Select
     _tags: Input
     _textarea: TextArea
 
-    show_sidebar = reactive(False)
-
     def compose(self) -> ComposeResult:
-
-        self._title = Input(id="title", placeholder="Title of the article")
-        self._author = Input(id="author", placeholder="Author", value=AUTHOR)
-        self._icon = Input(id="icon", placeholder="Icon", value="fa-regular fa-newspaper")
-        self._date = Input(
-            id="date", placeholder="Date", value=datetime.date.today().isoformat()
+        field = self.get_field_values()
+        self._title = Input(
+            id="title", placeholder="Title of the article", value=field["title"]
         )
-        self._category = Select(
-            ((line, line) for line in CATEGORIES), id="category", value="General"
-        )
-        self._tags = Input(
-            id="tags", placeholder="Tags separeted with commas", valid_empty=True
-        )
+        self._author = Input(id="author", placeholder="Author", value=field["author"])
+        self._date = Input(id="date", placeholder="Date", value=field["date"])
+        self._category = Select(((line, line) for line in CATEGORIES), id="category", value=field["category"])
+        self._tags = Input( id="tags", placeholder="Tags separeted with commas", value=field["tags"],  valid_empty=True)
         self._textarea = ExtendedTextArea(
-            id="textarea", text=DEFAULT_TEXTAREA, language="markdown", theme=TEXTAREA_THEME, tab_behavior="indent"
+            id="textarea",
+            text=field["content"],
+            language="markdown",
+            theme=TEXTAREA_THEME,
+            tab_behavior="indent",
         )
         _save_button = Button("Save", variant="primary")
 
@@ -100,8 +95,6 @@ class Frodown(App[None]):
             self._date,
             Label("Category"),
             self._category,
-            Label("icon"),
-            self._icon,
             Label("Tags"),
             self._tags,
             Label("Article"),
@@ -112,8 +105,38 @@ class Frodown(App[None]):
         self.original_text_area_position = self._textarea.styles.offset
         self.textarea_height = self._textarea.styles.height
 
+    def get_field_values(self) -> dict:
+        draft_content = Helper.get_draft_file_content()
+
+        return {
+            "title": draft_content["title"] if draft_content is not None else "",
+            "author": draft_content["author"] if draft_content is not None else AUTHOR,
+            "date": draft_content["date"] if draft_content is not None else datetime.date.today().isoformat(),
+            "category": draft_content["category"] if draft_content is not None else "General",
+            "tags": draft_content["tags"] if draft_content is not None else "",
+            "content": draft_content["content"] if draft_content is not None else DEFAULT_TEXTAREA,
+            "is_default_values": draft_content is None,
+            "filename": draft_content["filename"] if draft_content is not None else None,
+        }
+
     def action_toggle_dark(self) -> None:
         self.dark = not self.dark
+
+    def form_has_change(self) -> bool:
+        fields = self.get_field_values()
+
+        return fields["title"] != self._title.value or fields["author"] != self._author.value or fields["date"] != self._date.value or fields["category"] != self._category.value or fields["tags"] != self._tags.value or fields["content"] != self._textarea.text
+
+    def action_quit(self) -> None:
+        # TODO: Add a confirmation dialog?
+        message = "Bye! 👋"
+        is_change = self.form_has_change()
+
+        if is_change:
+           filename = Helper.save_file(self, is_draft = True)
+           message = f"Article saved as {filename}!\nBye! 👋"
+
+        exit(message)
 
     def action_expand_textarea(self) -> None:
         global is_textarea_expanded
@@ -128,33 +151,12 @@ class Frodown(App[None]):
 
         is_textarea_expanded = not is_textarea_expanded
 
-    @on(Select.Changed)
-    def select_changed(self, event: Select.Changed) -> None:
-        self._icon.value = Helper.get_icon_by_category(self._category.value)
-
     def format_tags(self, tags: str) -> str:
         return "\n  -".join(tags.split(","))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        frontmatter = f"""---
-title: {self._title.value}
-icon: {self._icon.value}
-author: {self._author.value}
-date: {self._date.value}
-category:
-  - {self._category.value}
-tags:
-  - {self.format_tags(self._tags.value)}
-"""
-
-        filename = f"./{self._title.value.lower().replace(' ', '_').replace('/', '_')}.md"
-
-        with open(filename, "w") as file:
-            file.write(frontmatter)
-            file.write("---\n")
-            file.write(self._textarea.text)
-
-        self.exit(message=f"Article {self._title.value} saved as {filename}!")
+        filename = Helper.save_file(self)
+        exit(f"Article saved as {filename}!\nBye! 👋")
 
     def action_toggle_sidebar(self) -> None:
         sidebar = self.query_one(Sidebar)
