@@ -1,5 +1,7 @@
 import os
+import re
 
+FRONTMATTER_TOTAL_DELIMITERS = 2
 
 class Helper:
     def get_categories() -> list[str]:
@@ -20,6 +22,7 @@ Intro text here
 - - -
 ## Subtitle
 """
+
 
     def get_cheat_sheet() -> str:
         return """
@@ -52,7 +55,8 @@ Use == == to mark. ==highlighted==
 NOTE: My intention is to add a table, so you can select the code and then, the code will be copied to the Textarea.
 """
 
-    def get_icon_by_category(category:str = "General") -> str:
+
+    def get_icon_by_category(category: str = "General") -> str:
         icons_list = {
             "General": "fa-regular fa-newspaper",
             "Raspberry Pi": "fa-brands fa-raspberry-pi",
@@ -64,6 +68,84 @@ NOTE: My intention is to add a table, so you can select the code and then, the c
             "Atomic Pi": "fa-solid fa-microchip",
             "Banana Pi": "fa-solid fa-ban",
             "ODROID": "fa-solid fa-microchip",
-            "Orange Pi": "fa-solid fa-microchip"
+            "Orange Pi": "fa-solid fa-microchip",
         }
+
         return icons_list.get(category, "fa-regular fa-newspaper")
+
+
+    def get_draft_file_content() -> dict:
+        def _get_lines_between_tags_and_dashes(lines: list[str]) -> str:
+            result = []
+            for line in lines:
+                if line.startswith('---'):
+                    break
+                else:
+                    result.append(line)
+
+            return ", ".join(result).replace("  - ", "").replace("\n", "")
+
+        frontmatter = {}
+        filename = [file for file in os.listdir() if file.endswith(".draft")]
+        if not filename:
+            return None
+
+        with open(filename[0], "r") as file:
+            lines = file.readlines()
+            count_frontmatter_delimitier = 0
+
+            for line in lines:
+                if count_frontmatter_delimitier == FRONTMATTER_TOTAL_DELIMITERS:
+                    frontmatter["content"] = line
+                    frontmatter["content"] += "".join(lines[lines.index(line) + 1 :])
+                    break
+
+                if "---" in line:
+                    count_frontmatter_delimitier+=1
+
+                if match := re.match(r"(\w+):\s*(.*)", line):
+                    key = match[1]
+                    value = match[2]
+                    if key == "author":
+                        frontmatter["author"] = value
+                    elif key == "category":
+                        frontmatter["category"] = "".join(lines[lines.index(line) + 1]).replace("  - ", "").replace("\n", "")
+                    elif key == "date":
+                        frontmatter["date"] = value
+                    elif key == "icon":
+                        frontmatter["icon"] = value
+                    elif key == "tags":
+                        frontmatter["tags"] = _get_lines_between_tags_and_dashes(lines[lines.index(line) + 1 :])
+                    elif key == "title":
+                        frontmatter["title"] = value
+        frontmatter["filename"] = filename[0]
+
+        return frontmatter
+
+
+    def save_file(self, is_draft: bool = False) -> str:
+        extension = "md.draft" if is_draft else "md"
+        frontmatter = f"""---
+title: {self._title.value}
+icon: {Helper.get_icon_by_category(self._category.value)}
+author: {self._author.value}
+date: {self._date.value}
+category:
+  - {self._category.value}
+tags:
+  - {self.format_tags(self._tags.value)}
+"""
+
+        filename = f"./{self._title.value.lower().replace(' ', '_').replace('/', '_') if self._title.value else 'no_title'}.{extension}"
+        draft_filename = f"{filename}.draft"
+
+        if os.path.exists(draft_filename) and not is_draft:
+            os.remove(draft_filename)
+
+        #  TODO: Handle the case when the file already exists and error with open
+        with open(filename, "w") as file:
+            file.write(frontmatter)
+            file.write("---\n")
+            file.write(self._textarea.text)
+
+        return filename
