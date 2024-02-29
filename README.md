@@ -17,8 +17,8 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 - [x] Light theme (because I think some people prefer brightness 🤷‍♂️).
 - [x] Markdown cheat sheet on the sidebar.
 - [x] Markdown zen mode & improvements.
-- [ ] Open with the latest values if you quit without saving the information.
-- [ ] Move categories and other constants to an environment (env) file.
+- [x] Move categories and other constants to an environment or text file.
+- [x] Save a draft & Open with the latest values if you quit without saving the information previously.
 - [ ] If you have multi-language support on your site, create multiple markdown files.
 - [ ] Implement AI to suggest tags and categories, or translate the article.
 - [ ] Package it as a standalone app.
