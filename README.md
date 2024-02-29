@@ -12,16 +12,20 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 
 - [x] Frontmatter support.
 - [x] Markdown editor.
-- [x] Save to a file.
-- [x] Add a footer.
-- [x] Light theme (because I think some people prefer brightness 🤷‍♂️).
-- [x] Markdown cheat sheet on the sidebar.
+- [x] Dark/Light theme (because I think some people prefer brightness 🤷‍♂️).
 - [x] Markdown zen mode & improvements.
+- [x] Local AI to suggest tags ussing Ollama. 🤯
+
+## TODO
+
+- [x] Add a footer.
+- [x] Save to a file.
+- [x] Markdown cheat sheet on the sidebar.
 - [x] Move categories and other constants to an environment or text file.
 - [x] Save a draft & Open with the latest values if you quit without saving the information previously.
 - [ ] If you have multi-language support on your site, create multiple markdown files.
-- [ ] Implement AI to suggest tags and categories, or translate the article.
-- [ ] Package it as a standalone app.
+- [ ] Accept parameters from the command line.
+- [ ] Package it as a standalone app. 🚀
 
 ## How to use
 
@@ -35,6 +39,12 @@ python main.py
 ```
 
 Clicking on **[Save]** will save it to the same directory with the title 'slugged' with the extension '.md'.
+
+If you want to use the AI to suggest tags, install Ollama and run the following command:
+
+```bash
+ollama run mistral:7b-instruct-v0.2-q4_K_S
+```
 
 ## License and credits
 
