@@ -3,7 +3,6 @@ from textual import events
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.events import Blur
-from textual.reactive import reactive
 from textual.containers import Container
 from helper import Helper
 
@@ -74,7 +73,7 @@ class Frodown(App[None]):
         self._author = Input(id="author", placeholder="Author", value=field["author"])
         self._date = Input(id="date", placeholder="Date", value=field["date"])
         self._category = Select(((line, line) for line in CATEGORIES), id="category", value=field["category"])
-        self._tags = Input( id="tags", placeholder="Tags separeted with commas", value=field["tags"],  valid_empty=True)
+        self._tags = Input(id="tags", placeholder="Tags separeted with commas", value=field["tags"],  valid_empty=True)
         self._textarea = ExtendedTextArea(
             id="textarea",
             text=field["content"],
@@ -141,15 +140,17 @@ class Frodown(App[None]):
     def action_expand_textarea(self) -> None:
         global is_textarea_expanded
 
-        # TODO: Hide categories list If displayed and refactor the code
-        if is_textarea_expanded:
-            self._textarea.styles.offset = self.original_text_area_position
-            self._textarea.styles.height = self.textarea_height
-        else:
-            self._textarea.styles.offset = (0, -40)
-            self._textarea.styles.height = "100%"
+        # TODO: Hide categories list If displayed
+        self._textarea.styles.offset = self.original_text_area_position if is_textarea_expanded else (0, -35)
+        self._textarea.styles.height = self.textarea_height if is_textarea_expanded else "100%"
 
         is_textarea_expanded = not is_textarea_expanded
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        if self._tags.value != "":
+            return
+        # TODO: Better handle of the tags, because the Select field keep opened
+        self._tags.value = Helper.predice_ai_tags(category = self._category.value, title = self._title.value)
 
     def format_tags(self, tags: str) -> str:
         return "\n  -".join(tags.split(","))

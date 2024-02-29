@@ -1,7 +1,20 @@
 import os
 import re
+import httpx
+from string import Template
 
 FRONTMATTER_TOTAL_DELIMITERS = 2
+TAG_TEMPLATE = Template(
+    """Search tags for the following topic and title. The topic is $topic and the title is $title. Show me four tags, only one word or two per tag with comma separated and don't include a preamble and don't include dot at the end.
+"""
+)
+OLLAMA_ENDPOINT = "http://localhost:11434/api/generate"
+OLLAMA_CONFIG = {
+    "model": "mistral:7b-instruct-v0.2-q4_K_S",
+    "keep_alive": "5m",
+    "stream": False,
+}
+
 
 class Helper:
     def get_categories() -> list[str]:
@@ -22,7 +35,6 @@ Intro text here
 - - -
 ## Subtitle
 """
-
 
     def get_cheat_sheet() -> str:
         return """
@@ -55,8 +67,8 @@ Use == == to mark. ==highlighted==
 NOTE: My intention is to add a table, so you can select the code and then, the code will be copied to the Textarea.
 """
 
-
     def get_icon_by_category(category: str = "General") -> str:
+        # sourcery skip: instance-method-first-arg-name
         icons_list = {
             "General": "fa-regular fa-newspaper",
             "Raspberry Pi": "fa-brands fa-raspberry-pi",
@@ -73,12 +85,11 @@ NOTE: My intention is to add a table, so you can select the code and then, the c
 
         return icons_list.get(category, "fa-regular fa-newspaper")
 
-
     def get_draft_file_content() -> dict:
         def _get_lines_between_tags_and_dashes(lines: list[str]) -> str:
             result = []
             for line in lines:
-                if line.startswith('---'):
+                if line.startswith("---"):
                     break
                 else:
                     result.append(line)
@@ -101,7 +112,7 @@ NOTE: My intention is to add a table, so you can select the code and then, the c
                     break
 
                 if "---" in line:
-                    count_frontmatter_delimitier+=1
+                    count_frontmatter_delimitier += 1
 
                 if match := re.match(r"(\w+):\s*(.*)", line):
                     key = match[1]
@@ -109,19 +120,24 @@ NOTE: My intention is to add a table, so you can select the code and then, the c
                     if key == "author":
                         frontmatter["author"] = value
                     elif key == "category":
-                        frontmatter["category"] = "".join(lines[lines.index(line) + 1]).replace("  - ", "").replace("\n", "")
+                        frontmatter["category"] = (
+                            "".join(lines[lines.index(line) + 1])
+                            .replace("  - ", "")
+                            .replace("\n", "")
+                        )
                     elif key == "date":
                         frontmatter["date"] = value
                     elif key == "icon":
                         frontmatter["icon"] = value
                     elif key == "tags":
-                        frontmatter["tags"] = _get_lines_between_tags_and_dashes(lines[lines.index(line) + 1 :])
+                        frontmatter["tags"] = _get_lines_between_tags_and_dashes(
+                            lines[lines.index(line) + 1 :]
+                        )
                     elif key == "title":
                         frontmatter["title"] = value
         frontmatter["filename"] = filename[0]
 
         return frontmatter
-
 
     def save_file(self, is_draft: bool = False) -> str:
         extension = "md.draft" if is_draft else "md"
@@ -149,3 +165,16 @@ tags:
             file.write(self._textarea.text)
 
         return filename
+
+    def predice_ai_tags(category: str, title: str) -> str:
+        prompt = TAG_TEMPLATE.substitute(topic=category, title=title)
+        response = httpx.post(
+            OLLAMA_ENDPOINT,
+            json={"prompt": prompt, **OLLAMA_CONFIG},
+            headers={"Content-Type": "application/json"},
+            timeout=10,
+        )
+        if response.status_code != 200:
+            return None
+
+        return response.json()["response"].strip()
