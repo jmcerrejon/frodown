@@ -177,4 +177,4 @@ tags:
         if response.status_code != 200:
             return None
 
-        return response.json()["response"].strip()
+        return response.json()["response"].strip().split("\n")[0]
