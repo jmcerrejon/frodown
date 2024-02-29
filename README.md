@@ -14,7 +14,7 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 - [x] Markdown editor.
 - [x] Dark/Light theme (because I think some people prefer brightness 🤷‍♂️).
 - [x] Markdown zen mode & improvements.
-- [x] Local AI to suggest tags ussing Ollama. 🤯
+- [x] Local AI to suggest tags using Ollama. 🤯
 
 ## TODO
 
