@@ -10,10 +10,10 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 
 ## Features
 
-- [x] Frontmatter support.
-- [x] Markdown editor.
+- [x] Frontmatter/Markdown support.
 - [x] Dark/Light theme (because I think some people prefer brightness 🤷‍♂️).
-- [x] Markdown zen mode & improvements.
+- [x] Markdown zen mode & improvements on typewriting.
+- [x] Auto-draft mode: Open with the latest options if you quit without saving the information previously.
 - [x] Local AI to suggest tags using Ollama. 🤯
 
 ## TODO
@@ -22,10 +22,16 @@ It's a simple tool that I use to write my blog posts and other markdown files. M
 - [x] Save to a file.
 - [x] Markdown cheat sheet on the sidebar.
 - [x] Move categories and other constants to an environment or text file.
-- [x] Save a draft & Open with the latest values if you quit without saving the information previously.
 - [ ] If you have multi-language support on your site, create multiple markdown files.
 - [ ] Accept parameters from the command line.
-- [ ] Package it as a standalone app. 🚀
+- [ ] Package it as a standalone app.
+
+## Power UP! 🚀
+
+Could an application work as a server, from Terminal (TUI) AND with a _GUI_ on _macOS, Windows & Linux_, all at the same time? It sounds crazy!! Let's do it!
+
+- [ ] GUI App. 🚀
+- [ ] Website App running as a web server.
 
 ## How to use
 
@@ -40,7 +46,7 @@ python main.py
 
 Clicking on **[Save]** will save it to the same directory with the title 'slugged' with the extension '.md'.
 
-If you want to use the AI to suggest tags, install Ollama and run the following command:
+If you want to use the AI to suggest tags, install [Ollama](https://github.com/ollama/ollama) and run the following command: `
 
 ```bash
 ollama run mistral:7b-instruct-v0.2-q4_K_S
