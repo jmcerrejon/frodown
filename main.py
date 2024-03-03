@@ -19,7 +19,7 @@ from textual.widgets import (
 
 settings = Helper.get_settings()
 
-AUTHOR = settings["default"]["default_author"] if "default_author" in settings["default"] else "Anonymous"
+AUTHOR = settings["default"]["author"] if "author" in settings["default"] else "Anonymous"
 CATEGORIES = settings["default"]["categories"] if "categories" in settings["default"] else ["General"]
 DEFAULT_TEXTAREA = settings["default"]["textarea_default_content"] if "textarea_default_content" in settings["default"] else ""
 TEXTAREA_THEME = settings["default"]["theme"] if "theme" in settings["default"] else "monokai"
