@@ -1,0 +1,11 @@
+[default]
+author = "Jose Cerrejon"
+theme = "monokai"
+categories = ["General", "Project Manager", "Raspberry Pi", "Developer", "Apple", "Linux", "Android", "Arduino", "Atomic Pi", "Banana Pi", "ODROID", "Orange Pi"]
+textarea_default_content = """# Title
+![Alt](/path/to/image.jpg)
+
+Intro text here
+- - -
+## Subtitle
+"""

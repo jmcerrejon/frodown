@@ -35,6 +35,7 @@ Could an **application work as a server, from Terminal (TUI) AND with a _GUI_ on
 
 ## How to use
 
+I chose _TOML_ format for the settings. So rename the file `settings.toml.example` and change the settings in your file.
 Change the constant in the `main.py & categories.txt` files to match your needs. Then, run the following commands:
 
 ```bash

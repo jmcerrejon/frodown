@@ -1,6 +1,7 @@
 import os
 import re
 import httpx
+import tomli
 from string import Template
 
 FRONTMATTER_TOTAL_DELIMITERS = 2
@@ -17,24 +18,16 @@ OLLAMA_CONFIG = {
 
 
 class Helper:
-    def get_categories() -> list[str]:
-        categories_file_path = "categories.txt"
-        categories = ["General"]
-
-        if os.path.exists(categories_file_path):
-            with open(categories_file_path, "r") as file:
-                categories = file.read().splitlines()
-
-        return categories
-
-    def get_textarea_example() -> str:
-        return """# Title
-![Alt](/path/to/image.jpg)
-
-Intro text here
-- - -
-## Subtitle
-"""
+    def get_settings() -> dict:
+        try:
+            with open("settings.toml", mode="rb") as fp:
+                return tomli.load(fp)
+        except FileNotFoundError:
+            exit("settings.toml not found.")
+        except KeyError:
+            return ""
+        except Exception:
+            exit("settings.toml does not have the correct format.")
 
     def get_cheat_sheet() -> str:
         return """

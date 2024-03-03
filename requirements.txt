@@ -1,3 +1,4 @@
+tomli
 textual
 textual[syntax]
 httpx
