@@ -3,6 +3,7 @@ import re
 import httpx
 import tomli
 from string import Template
+from typing import Optional
 
 FRONTMATTER_TOTAL_DELIMITERS = 2
 TAG_TEMPLATE = Template(
@@ -159,15 +160,19 @@ tags:
 
         return filename
 
-    def predice_ai_tags(category: str, title: str) -> str:
+    def predice_ai_tags(category: str, title: str) -> Optional[str]:
+        # sourcery skip: instance-method-first-arg-name
         prompt = TAG_TEMPLATE.substitute(topic=category, title=title)
-        response = httpx.post(
-            OLLAMA_ENDPOINT,
-            json={"prompt": prompt, **OLLAMA_CONFIG},
-            headers={"Content-Type": "application/json"},
-            timeout=10,
-        )
-        if response.status_code != 200:
+        try:
+            response = httpx.post(
+                OLLAMA_ENDPOINT,
+                json={"prompt": prompt, **OLLAMA_CONFIG},
+                headers={"Content-Type": "application/json"},
+                timeout=10,
+            )
+            if response.status_code != 200:
+                return None
+        except Exception:
             return None
 
         return response.json()["response"].strip().split("\n")[0]

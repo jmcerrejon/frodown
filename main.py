@@ -31,6 +31,7 @@ textarea_height = "0%"
 
 class ExtendedTextArea(TextArea):
     def _change_text(self, event, text: str, insert_text: str, move_cursor_relative: int = 0) -> None:
+        # sourcery skip: class-extract-method
         if event.character == text:
             self.insert(insert_text)
             self.move_cursor_relative(columns=move_cursor_relative)
@@ -128,7 +129,7 @@ class Frodown(App[None]):
 
         return fields["title"] != self._title.value or fields["author"] != self._author.value or fields["date"] != self._date.value or fields["category"] != self._category.value or fields["tags"] != self._tags.value or fields["content"] != self._textarea.text
 
-    def action_quit(self) -> None:
+    def action_quit(self) -> None:  # sourcery skip: use-named-expression
         # TODO: Add a confirmation dialog?
         message = "Bye! 👋"
         is_change = self.form_has_change()
@@ -152,7 +153,9 @@ class Frodown(App[None]):
         if self._tags.value != "":
             return
         # TODO: Better handle of the tags, because the Select field keep opened
-        self._tags.value = Helper.predice_ai_tags(category = self._category.value, title = self._title.value)
+        ai_tags = Helper.predice_ai_tags(category = self._category.value, title = self._title.value)
+        if ai_tags is not None:
+            self._tags.value = ai_tags
 
     def format_tags(self, tags: str) -> str:
         return "\n  -".join(tags.split(","))
