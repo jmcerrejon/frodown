@@ -4,9 +4,9 @@
 
 ## Frontmatter + Markdown editor
 
-This is a simple markdown editor with frontmatter support. It's built with _Python_ + a great _TUI (Terminal User Interface)_ called _Textual_ (+ info at [textualize.io](https://textualize.io)).
+This is a simple markdown editor with _Frontmatter_ support. It's built using _Python_ + a great _TUI (Terminal User Interface)_ called _Textual_. More info at [textualize.io](https://textualize.io).
 
-It's a simple tool that I use to write my blog posts and other markdown files. My blog is built using [VuePress 2](https://v2.vuepress.vuejs.org) + [Hope](https://theme-hope.vuejs.press) theme. Visit me at https://misapuntesde.com
+It's the tool I use to write my blog posts and other markdown files. I built my blog using [VuePress 2](https://v2.vuepress.vuejs.org) + [Hope](https://theme-hope.vuejs.press) theme. You can visit me at https://misapuntesde.com
 
 ## Features
 
@@ -35,8 +35,9 @@ Could an **application work as a server, from Terminal (TUI) AND with a _GUI_ on
 
 ## How to use
 
-I chose _TOML_ format for the settings. So rename the file `settings.toml.example` and change the settings in your file.
-Change the constant in the `main.py & categories.txt` files to match your needs. Then, run the following commands:
+I chose the _TOML_ format for the settings, so please rename the file `settings.toml.example` and update the settings in your file.
+
+Change the constants in the `main.py` and `categories.txt` files to match your needs. Then, run the following commands:
 
 ```bash
 python -m venv venv
@@ -45,7 +46,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Clicking on **[Save]** will save it to the same directory with the title 'slugged' with the extension '.md'.
+Clicking on **[Save]** will save it to the same directory with the title 'slugged' and the extension '.md'.
 
 If you want to use the AI to suggest tags, install [Ollama](https://github.com/ollama/ollama) and run the following command:
 
@@ -55,11 +56,11 @@ ollama run mistral:7b-instruct-v0.2-q4_K_S
 
 ## License and credits
 
-Frodown © 2024 by [Jose Cerrejon](https://github.com/jmcerrejon) is licensed under [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
+Frodown 2024 by [Jose Cerrejon](https://github.com/jmcerrejon) is licensed under [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
 
 I'm using _Conventional Commits v1.0.0_. More information can be found at https://www.conventionalcommits.org/en/v1.0.0/.
 
-This repository is hosted at GitHub. You can find the repository at https://github.com/jmcerrejon/frodown
+This repository is hosted at _GitHub_. You can find the repository at https://github.com/jmcerrejon/frodown
 
 You can use it for free on your own. If you want to support me, you can!:
 
