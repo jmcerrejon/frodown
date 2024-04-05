@@ -133,7 +133,7 @@ NOTE: My intention is to add a table, so you can select the code and then, the c
 
         return frontmatter
 
-    def save_file(self, is_draft: bool = False) -> str:
+    def save_file(self, output_directory: str,  is_draft: bool = False) -> str:
         extension = "md.draft" if is_draft else "md"
         frontmatter = f"""---
 title: {self._title.value}
@@ -146,7 +146,7 @@ tags:
   - {self.format_tags(self._tags.value)}
 """
 
-        filename = f"./{self._title.value.lower().replace(' ', '_').replace('/', '_') if self._title.value else 'no_title'}.{extension}"
+        filename = f"{output_directory}/{self._title.value.lower().replace(' ', '_').replace('/', '_') if self._title.value else 'no_title'}.{extension}"
         draft_filename = f"{filename}.draft"
 
         if os.path.exists(draft_filename) and not is_draft:

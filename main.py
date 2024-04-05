@@ -23,6 +23,7 @@ AUTHOR = settings["default"]["author"] if "author" in settings["default"] else "
 CATEGORIES = settings["default"]["categories"] if "categories" in settings["default"] else ["General"]
 DEFAULT_TEXTAREA = settings["default"]["textarea_default_content"] if "textarea_default_content" in settings["default"] else ""
 TEXTAREA_THEME = settings["default"]["theme"] if "theme" in settings["default"] else "monokai"
+OUTPUT_DIR = settings["default"]["output_dir"] if "output_dir" in settings["default"] else "./"
 _save_button = Button
 
 original_text_area_position = (0, 0)
@@ -161,7 +162,7 @@ class Frodown(App[None]):
         return "\n  -".join(tags.split(","))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        filename = Helper.save_file(self)
+        filename = Helper.save_file(self, output_directory=OUTPUT_DIR)
         exit(f"Article saved as {filename}!\nBye! 👋")
 
     def action_toggle_sidebar(self) -> None:
