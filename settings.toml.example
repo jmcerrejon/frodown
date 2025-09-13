@@ -3,6 +3,7 @@ author = "Jose Cerrejon"
 theme = "monokai"
 categories = ["General", "Project Manager", "Raspberry Pi", "Developer", "Apple", "Linux", "Android", "Arduino", "Atomic Pi", "Banana Pi", "ODROID", "Orange Pi"]
 output_dir = "."
+auto_open_ide = "" # Or "code" for VSCode
 textarea_default_content = """# Title
 ![Alt](/path/to/image.jpg)
 

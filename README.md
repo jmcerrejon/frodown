@@ -10,28 +10,28 @@ It's the tool I use to write my blog posts and other markdown files. I built my 
 
 ## Features
 
-- [x] Frontmatter/Markdown support.
-- [x] Dark/Light theme (because I think some people prefer brightness 🤷‍♂️).
-- [x] Markdown zen mode & improvements on typewriting.
-- [x] Auto-draft mode: Open with the latest options if you quit without saving the information previously.
-- [x] Local AI to suggest tags using Ollama. 🤯
+-   [x] Frontmatter/Markdown support.
+-   [x] Dark/Light theme (because I think some people prefer brightness 🤷‍♂️).
+-   [x] Markdown zen mode & improvements on typewriting.
+-   [x] Auto-draft mode: Open with the latest options if you quit without saving the information previously.
+-   [x] Local AI to suggest tags using Ollama. 🤯
 
 ## TODO
 
-- [x] Add a footer.
-- [x] Save to a file.
-- [x] Markdown cheat sheet on the sidebar.
-- [x] Move categories and other constants to an environment or text file.
-- [ ] If you have multi-language support on your site, create multiple markdown files.
-- [ ] Accept parameters from the command line.
-- [ ] Package it as a standalone app.
+-   [x] Add a footer.
+-   [x] Save to a file.
+-   [x] Markdown cheat sheet on the sidebar.
+-   [x] Move categories and other constants to an environment or text file.
+-   [ ] If you have multi-language support on your site, create multiple markdown files.
+-   [ ] Accept parameters from the command line.
+-   [ ] Package it as a standalone app.
 
 ## Power UP! 🚀
 
 Could an **application work as a server, from Terminal (TUI) AND with a _GUI_ on _macOS, Windows & Linux_, all at the same time?** It sounds crazy!! Let's do it!
 
-- [ ] GUI App. 🚀
-- [ ] Website App running as a web server.
+-   [ ] GUI App. 🚀
+-   [ ] Website App running as a web server.
 
 ## How to use
 
@@ -39,11 +39,39 @@ I chose the _TOML_ format for the settings, so please rename the file `settings.
 
 Change the constants in the `main.py` and `categories.txt` files to match your needs. Then, run the following commands:
 
+### Using uv (recommended)
+
+[uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver.
+
+```bash
+# Install uv if you don't have it
+curl -sSf https://astral.sh/uv/install.sh | sh
+
+# Create a virtual environment (honors .python-version, e.g., 3.12)
+uv venv
+# Optional (only if Python 3.12 is not installed yet)
+# uv python install 3.12
+
+# Activate the environment (macOS/Linux)
+source .venv/bin/activate
+
+# Sync dependencies from pyproject.toml and install the project (editable)
+uv sync
+
+# For development (installs the 'dev' extra defined in [project.optional-dependencies])
+uv sync --dev
+
+# Run the application
+uv run python -m frodown.main
+```
+
+### Using traditional tools
+
 ```bash
 python -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-python main.py
+pip install -e .
+python -m frodown.main
 ```
 
 Clicking on **[Save]** will save it to the same directory with the title 'slugged' and the extension '.md'.
@@ -51,21 +79,27 @@ Clicking on **[Save]** will save it to the same directory with the title 'slugge
 If you want to use the AI to suggest tags, install [Ollama](https://github.com/ollama/ollama) and run the following command:
 
 ```bash
-ollama run mistral:7b-instruct-v0.2-q4_K_S
+ollama run gemma2:2b
 ```
+
+## Testing
+
+The project includes comprehensive unit tests using pytest. For more details about testing, see [tests/README.md](tests/README.md).
 
 ## License and credits
 
-Frodown 2024 by [Jose Cerrejon](https://github.com/jmcerrejon) is licensed under [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
+Frodown 2025 by [Jose Cerrejon](https://github.com/jmcerrejon) is licensed under [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
 
 I'm using _Conventional Commits v1.0.0_. More information can be found at https://www.conventionalcommits.org/en/v1.0.0/.
 
 This repository is hosted at _GitHub_. You can find the repository at https://github.com/jmcerrejon/frodown
 
+I'm using Prompt Driven Development (PDD) to build this project. More info at https://www.promptdriven.dev
+
 You can use it for free on your own. If you want to support me, you can!:
 
-- 🪙 [paypal.me/jmcerrejon](https://paypal.me/jmcerrejon)
+-   🪙 [paypal.me/jmcerrejon](https://paypal.me/jmcerrejon)
 
-- ☕️ [ko-fi.com > Buy me a coffee](https://ko-fi.com/cerrejon)
+-   ☕️ [ko-fi.com > Buy me a coffee](https://ko-fi.com/cerrejon)
 
-- 🟡 Bitcoin: 32XtfF8eKkWkAGJsHvBsjqsted5NKsGBcv
+-   🟡 Bitcoin: 32XtfF8eKkWkAGJsHvBsjqsted5NKsGBcv
