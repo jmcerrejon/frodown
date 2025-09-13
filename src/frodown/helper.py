@@ -14,7 +14,7 @@ TAG_TEMPLATE = Template(
 )
 OLLAMA_ENDPOINT = "http://localhost:11434/api/generate"
 OLLAMA_CONFIG = {
-    "model": "mistral:7b-instruct-v0.2-q4_K_S",
+    "model": "gemma2:2b",
     "keep_alive": "5m",
     "stream": False,
 }

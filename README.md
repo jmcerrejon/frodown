@@ -94,8 +94,6 @@ I'm using _Conventional Commits v1.0.0_. More information can be found at https:
 
 This repository is hosted at _GitHub_. You can find the repository at https://github.com/jmcerrejon/frodown
 
-I'm using Prompt Driven Development (PDD) to build this project. More info at https://www.promptdriven.dev
-
 You can use it for free on your own. If you want to support me, you can!:
 
 -   🪙 [paypal.me/jmcerrejon](https://paypal.me/jmcerrejon)
