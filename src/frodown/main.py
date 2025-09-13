@@ -1,37 +1,52 @@
 import datetime
+
 from textual import events
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.events import Blur
 from textual.containers import Container
-from helper import Helper
-
+from textual.events import Blur
 from textual.widgets import (
-    Static,
-    Header,
+    Button,
     Footer,
+    Header,
     Input,
     Label,
     Select,
+    Static,
     TextArea,
-    Button,
 )
+
+from frodown.helper import Helper
 
 settings = Helper.get_settings()
 
-AUTHOR = settings["default"]["author"] if "author" in settings["default"] else "Anonymous"
-CATEGORIES = settings["default"]["categories"] if "categories" in settings["default"] else ["General"]
-DEFAULT_TEXTAREA = settings["default"]["textarea_default_content"] if "textarea_default_content" in settings["default"] else ""
-TEXTAREA_THEME = settings["default"]["theme"] if "theme" in settings["default"] else "monokai"
-OUTPUT_DIR = settings["default"]["output_dir"] if "output_dir" in settings["default"] else "./"
+CATEGORIES = (
+    settings["default"]["categories"]
+    if "categories" in settings["default"]
+    else ["General"]
+)
+DEFAULT_TEXTAREA = (
+    settings["default"]["textarea_default_content"]
+    if "textarea_default_content" in settings["default"]
+    else ""
+)
+TEXTAREA_THEME = (
+    settings["default"]["theme"] if "theme" in settings["default"] else "monokai"
+)
+OUTPUT_DIR = (
+    settings["default"]["output_dir"] if "output_dir" in settings["default"] else "./"
+)
 _save_button = Button
 
 original_text_area_position = (0, 0)
 is_textarea_expanded = False
 textarea_height = "0%"
 
+
 class ExtendedTextArea(TextArea):
-    def _change_text(self, event, text: str, insert_text: str, move_cursor_relative: int = 0) -> None:
+    def _change_text(
+        self, event, text: str, insert_text: str, move_cursor_relative: int = 0
+    ) -> None:
         # sourcery skip: class-extract-method
         if event.character == text:
             self.insert(insert_text)
@@ -76,8 +91,17 @@ class Frodown(App[None]):
         )
         self._author = Input(id="author", placeholder="Author", value=field["author"])
         self._date = Input(id="date", placeholder="Date", value=field["date"])
-        self._category = Select(((line, line) for line in CATEGORIES), id="category", value=field["category"])
-        self._tags = Input(id="tags", placeholder="Tags separeted with commas", value=field["tags"],  valid_empty=True)
+        self._category = Select(
+            ((line, line) for line in CATEGORIES),
+            id="category",
+            value=field["category"],
+        )
+        self._tags = Input(
+            id="tags",
+            placeholder="Tags separeted with commas",
+            value=field["tags"],
+            valid_empty=True,
+        )
         self._textarea = ExtendedTextArea(
             id="textarea",
             text=field["content"],
@@ -113,13 +137,31 @@ class Frodown(App[None]):
 
         return {
             "title": draft_content["title"] if draft_content is not None else "",
-            "author": draft_content["author"] if draft_content is not None else AUTHOR,
-            "date": draft_content["date"] if draft_content is not None else datetime.date.today().isoformat(),
-            "category": draft_content["category"] if draft_content is not None else "General",
+            "author": draft_content["author"]
+            if draft_content is not None
+            else (
+                Helper.get_settings()["default"]["author"]
+                if "author" in Helper.get_settings()["default"]
+                else "Anonymous"
+            ),
+            "date": draft_content["date"]
+            if draft_content is not None
+            else datetime.date.today().isoformat(),
+            "category": draft_content["category"]
+            if draft_content is not None
+            else "General",
             "tags": draft_content["tags"] if draft_content is not None else "",
-            "content": draft_content["content"] if draft_content is not None else DEFAULT_TEXTAREA,
+            "content": draft_content["content"]
+            if draft_content is not None
+            else (
+                Helper.get_settings()["default"]["textarea_default_content"]
+                if "textarea_default_content" in Helper.get_settings()["default"]
+                else ""
+            ),
             "is_default_values": draft_content is None,
-            "filename": draft_content["filename"] if draft_content is not None else None,
+            "filename": draft_content["filename"]
+            if draft_content is not None
+            else None,
         }
 
     def action_toggle_dark(self) -> None:
@@ -128,7 +170,14 @@ class Frodown(App[None]):
     def form_has_change(self) -> bool:
         fields = self.get_field_values()
 
-        return fields["title"] != self._title.value or fields["author"] != self._author.value or fields["date"] != self._date.value or fields["category"] != self._category.value or fields["tags"] != self._tags.value or fields["content"] != self._textarea.text
+        return (
+            fields["title"] != self._title.value
+            or fields["author"] != self._author.value
+            or fields["date"] != self._date.value
+            or fields["category"] != self._category.value
+            or fields["tags"] != self._tags.value
+            or fields["content"] != self._textarea.text
+        )
 
     def action_quit(self) -> None:  # sourcery skip: use-named-expression
         # TODO: Add a confirmation dialog?
@@ -136,8 +185,10 @@ class Frodown(App[None]):
         is_change = self.form_has_change()
 
         if is_change:
-           filename = Helper.save_file(self, is_draft = True)
-           message = f"Article saved as {filename}!\nBye! 👋"
+            filename = Helper.save_file(
+                self, output_directory=OUTPUT_DIR, is_draft=True
+            )
+            message = f"Article saved as {filename}!\nBye! 👋"
 
         exit(message)
 
@@ -145,8 +196,12 @@ class Frodown(App[None]):
         global is_textarea_expanded
 
         # TODO: Hide categories list If displayed
-        self._textarea.styles.offset = self.original_text_area_position if is_textarea_expanded else (0, -35)
-        self._textarea.styles.height = self.textarea_height if is_textarea_expanded else "100%"
+        self._textarea.styles.offset = (
+            self.original_text_area_position if is_textarea_expanded else (0, -35)
+        )
+        self._textarea.styles.height = (
+            self.textarea_height if is_textarea_expanded else "100%"
+        )
 
         is_textarea_expanded = not is_textarea_expanded
 
@@ -154,7 +209,9 @@ class Frodown(App[None]):
         if self._tags.value != "":
             return
         # TODO: Better handle of the tags, because the Select field keep opened
-        ai_tags = Helper.predice_ai_tags(category = self._category.value, title = self._title.value)
+        ai_tags = Helper.predice_ai_tags(
+            category=self._category.value, title=self._title.value
+        )
         if ai_tags is not None:
             self._tags.value = ai_tags
 

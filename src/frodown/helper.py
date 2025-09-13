@@ -1,9 +1,11 @@
 import os
 import re
-import httpx
-import tomli
+import subprocess
 from string import Template
 from typing import Optional
+
+import httpx
+import tomli
 
 FRONTMATTER_TOTAL_DELIMITERS = 2
 TAG_TEMPLATE = Template(
@@ -133,7 +135,7 @@ NOTE: My intention is to add a table, so you can select the code and then, the c
 
         return frontmatter
 
-    def save_file(self, output_directory: str,  is_draft: bool = False) -> str:
+    def save_file(self, output_directory: str, is_draft: bool = False) -> str:
         extension = "md.draft" if is_draft else "md"
         frontmatter = f"""---
 title: {self._title.value}
@@ -146,7 +148,7 @@ tags:
   - {self.format_tags(self._tags.value)}
 """
 
-        filename = f"{output_directory}/{self._title.value.lower().replace(' ', '_').replace('/', '_') if self._title.value else 'no_title'}.{extension}"
+        filename = f"{output_directory.rstrip('/')}/{self._title.value.lower().replace(' ', '_').replace('/', '_') if self._title.value else 'no_title'}.{extension}"
         draft_filename = f"{filename}.draft"
 
         if os.path.exists(draft_filename) and not is_draft:
@@ -176,3 +178,28 @@ tags:
             return None
 
         return response.json()["response"].strip().split("\n")[0]
+
+    def get_vscode_path():
+        try:
+            return subprocess.check_output(
+                ["where" if os.name == "nt" else "which", "code"], shell=True
+            ).decode("utf-8")
+        except subprocess.CalledProcessError:
+            return False
+
+    def open_vscode(directory):
+        try:
+            subprocess.check_call(["code", directory])
+            print(f"VSCode opened at {directory}")
+        except subprocess.CalledProcessError:
+            print("Failed to open VSCode")
+
+    def read_markdown_file(file_path, start_line, end_line):
+        with open(file_path, "r") as file:
+            lines = file.readlines()[start_line - 1 : end_line]
+            return "".join(lines)
+
+
+# Use the functions
+# open_vscode(get_vscode_path())
+# print(read_markdown_file('phpunit_using_laravel_in_x_minutes.md', 6, 34))
